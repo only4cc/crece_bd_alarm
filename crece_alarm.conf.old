@@ -1,0 +1,11 @@
+[principal]
+serverid   ='*'
+nodos      =http://srv0013.e-contact.cl:9200/    
+indexname  =eco-6m-2017.10.31
+query      ="mssql AND $serverid"
+
+[alarma]
+alarm_script =alarm.bat
+pct1  =1.05
+pct7  =1.05
+pct30 =1.05

@@ -1,0 +1,41 @@
+use Search::Elasticsearch;
+use Data::Dumper;
+use Data::Dumper::GUI;
+use Data::Printer;  
+
+my $index_name = 'eco-72h-2017.10.24';
+
+my $e = Search::Elasticsearch->new( nodes => [
+												'http://srv0013.e-contact.cl:9200/',
+											] );
+ 
+my $results = $e->search(
+    index => $index_name,
+    body  => {
+        query => {
+            query_string => { "query" => 'mssql' }
+        }
+    }
+);
+
+#print Dumper $results;
+#print scalar @{$results->{hits}->{hits}} ."\n";
+foreach (my $i=0; $i< scalar @{$results->{hits}->{hits}}; ++$i ) {
+	print $results->{hits}->{hits}->[$i]->{_source}->{serverid} ."\n";
+	print $results->{hits}->{hits}->[$i]->{_source}->{dbid} ."\n";
+	print $results->{hits}->{hits}->[$i]->{_source}->{"\@timestamp"} ."\n";
+	print $results->{hits}->{hits}->[$i]->{_source}->{size_bd_MB} ."\n";
+
+}
+ 
+#p $results;
+
+
+=begin
+"query": {
+        "query_string" : {
+            "query" : "mssql",
+            "use_dis_max" : true
+        }
+    }
+=cut	
