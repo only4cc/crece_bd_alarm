@@ -9,7 +9,7 @@ use Search::Elasticsearch;
 use Config::Tiny;
 use Data::Dumper;
 
-my $DEBUG      = 1;
+my $DEBUG      = 0;
 my $MAX_POINTS = 1000;
  
 print "Obteniendo lista de servidores ...\n" if $DEBUG;
@@ -25,7 +25,7 @@ my $nodo       = $config->{principal}->{nodos} || 'http://10.36.16.30:9200/'; #'
 #print "serverid:$serverid\nindex_name:$index_name\nnodo:$nodo\n";
 #exit;
 
-my $e = Search::Elasticsearch->new( nodes => [ $nodo, ], trace_to => 'Stderr' );
+my $e = Search::Elasticsearch->new( nodes => [ $nodo, ] ); #, trace_to => 'Stderr' );
 my $query = "mssql";
 
 # Ejecuta la consulta 
