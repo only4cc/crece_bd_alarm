@@ -11,6 +11,7 @@ use Date::Parse;
 use DateTime::Format::Epoch;
 use Statistics::Regression;
 use Config::Tiny;
+use Chart qw(grafica);
 
 my $DEBUG      = 0;    # 1: Imprime info. adicional, mas verboso
 my $MAX_POINTS = 1500; # (Aprox. 365 dias * cada 24 / 4 horas )
@@ -63,13 +64,20 @@ foreach (my $i=0; $i< scalar @{$results->{hits}->{hits}}; ++$i ) {
 	}
 	$ts = $results->{hits}->{hits}->[$i]->{_source}->{"\@timestamp"};
 	$ts_epoch = str2time($ts);
-	$db_size = $results->{hits}->{hits}->[$i]->{_source}->{size_bd_MB};
+	$db_size = int($results->{hits}->{hits}->[$i]->{_source}->{size_bd_MB});
 	if ( $DEBUG ) {
 		print $ts_epoch."\t";
 		print  $db_size."\n";
 	}
 	$puntos{ $ts_epoch } = $db_size;
 }
+
+my (@x,@y);
+foreach my $k ( keys %puntos ) {
+	push @x, $k;
+	push @y, $puntos{$k};
+}
+grafica( $db_name. ' en: '.$serverid, \@x, \@y);
 
 # Numero total de observaciones
 my $num_obs = scalar (keys %puntos);
@@ -294,4 +302,5 @@ sep();
 sub sep {
     print "--------------------------------------------------------------------------\n";
 }
+
 
